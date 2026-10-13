@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinh Phục Tri Thức - An Sinh Xã Hội</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font: Be Vietnam Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Be Vietnam Pro', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #bae6fd 100%);
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .custom-btn-shadow {
+            box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.15);
+            transition: all 0.1s ease;
+        }
+        .custom-btn-shadow:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.15);
+        }
+        .pulse-subtle {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .85; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-3 md:p-6 text-slate-800">
+
+    <div id="game-container" class="w-full max-w-3xl glass-card rounded-3xl p-5 md:p-8 relative overflow-hidden transition-all duration-300">
+        
+        <!-- ================= MÀN HÌNH KHỞI ĐỘNG ================= -->
+        <div id="start-screen" class="text-center py-8 flex flex-col items-center">
+            <div class="w-24 h-24 bg-sky-100 rounded-full flex items-center justify-center text-sky-600 text-4xl mb-5 shadow-inner pulse-subtle">
+                <i class="fa-solid fa-hands-holding-child"></i>
+            </div>
+            
+            <span class="bg-sky-100 text-sky-700 text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3">
+                MÔN GIÁO DỤC KINH TẾ VÀ PHÁP LUẬT 12
+            </span>
+            
+            <h1 class="text-2xl md:text-4xl font-extrabold text-slate-800 mb-4 leading-tight uppercase tracking-wide">
+                TRẮC NGHIỆM AN SINH XÃ HỘI
+            </h1>
+            
+            <p class="text-slate-600 text-sm md:text-base max-w-lg mb-8 leading-relaxed">
+                Thử thách kiến thức trắc nghiệm A/B/C/D và Nhận định Đúng/Sai thuộc chương trình Kinh tế & Pháp luật 12!
+            </p>
+
+            <div class="w-full max-w-md mb-8 grid grid-cols-2 gap-4 text-left">
+                <div class="p-4 bg-sky-50 rounded-2xl border border-sky-100 flex items-center space-x-3">
+                    <i class="fa-solid fa-circle-question text-sky-500 text-2xl"></i>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Số câu hỏi</p>
+                        <p class="text-base font-bold text-slate-800">10 Câu</p>
+                    </div>
+                </div>
+                <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex items-center space-x-3">
+                    <i class="fa-solid fa-clock text-amber-500 text-2xl"></i>
+                    <div>
+                        <p class="text-xs text-slate-500 font-medium">Thời gian</p>
+                        <p class="text-base font-bold text-slate-800">Tự do</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút Bắt đầu lớn nổi bật ở trung tâm -->
+            <button id="btn-start" onclick="startGame()" class="w-full max-w-md py-5 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 active:scale-95 text-white font-black text-xl rounded-2xl custom-btn-shadow flex items-center justify-center space-x-3 transition-all duration-200 transform shadow-lg shadow-sky-200">
+                <span>BẮT ĐẦU LÀM BÀI</span>
+                <i class="fa-solid fa-circle-play text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- ================= MÀN HÌNH CHƠI GAME ================= -->
+        <div id="quiz-screen" class="hidden">
+            <!-- Header bar -->
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center space-x-2">
+                    <span class="w-8 h-8 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-sm">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </span>
+                    <span class="font-bold text-slate-700 text-sm md:text-base">Học sinh Lớp 12</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-1.5 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200">
+                        <i class="fa-solid fa-star text-amber-500 text-sm"></i>
+                        <span id="current-score" class="font-black text-amber-700 text-sm">0</span>
+                        <span class="text-xs text-amber-500 font-semibold">điểm</span>
+                    </div>
+                    <div class="flex items-center space-x-1 text-slate-500 text-xs font-semibold">
+                        <i class="fa-solid fa-clock text-sky-500"></i>
+                        <span id="timer">00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-5">
+                <div class="flex justify-between text-xs font-bold text-slate-500 mb-1">
+                    <span id="question-number-text">CÂU 1 / 10</span>
+                    <span id="progress-percent" class="text-sky-600">10%</span>
+                </div>
+                <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5">
+                    <div id="progress-bar" class="h-full bg-sky-500 rounded-full transition-all duration-300 w-[10%]"></div>
+                </div>
+            </div>
+
+            <!-- Content Question Area -->
+            <div id="question-card" class="mb-6">
+                <div class="inline-block bg-sky-100 text-sky-700 text-xs font-bold px-3 py-1 rounded-full mb-2" id="question-type-badge">
+                    Trắc nghiệm 4 lựa chọn
+                </div>
+                <h2 id="question-text" class="text-base md:text-lg font-bold text-slate-800 leading-snug mb-4">
+                    Nội dung câu hỏi sẽ hiển thị ở đây...
+                </h2>
+
+                <!-- Zone A: For Multiple Choice Questions -->
+                <div id="mc-options-container" class="space-y-2.5">
+                    <!-- Buttons JS generated -->
+                </div>
+
+                <!-- Zone B: For True/False Statements Questions -->
+                <div id="tf-options-container" class="space-y-3 hidden">
+                    <!-- JS Generated Statement rows -->
+                </div>
+            </div>
+
+            <!-- Explanation Box -->
+            <div id="explanation-box" class="hidden mb-6 p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs md:text-sm text-slate-700">
+                <div class="flex items-start space-x-2">
+                    <i class="fa-solid fa-circle-info text-sky-500 text-lg mt-0.5 flex-shrink-0"></i>
+                    <div>
+                        <p class="font-bold text-slate-800 mb-0.5">Giải thích chi tiết:</p>
+                        <p id="explanation-text" class="leading-relaxed whitespace-pre-line">Lời giải thích...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Controls -->
+            <div class="flex justify-between items-center pt-2">
+                <div id="feedback-tag" class="hidden items-center space-x-1.5 font-bold text-sm">
+                    <!-- JS fills correct / incorrect status -->
+                </div>
+                <button id="btn-next" onclick="nextQuestion()" class="hidden ml-auto px-6 py-3 bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-bold text-sm rounded-xl custom-btn-shadow flex items-center space-x-2">
+                    <span>Câu tiếp theo</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+                <button id="btn-submit-tf" onclick="submitTFAnswer()" class="hidden ml-auto px-6 py-3 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-bold text-sm rounded-xl custom-btn-shadow flex items-center space-x-2">
+                    <span>Xác nhận đáp án</span>
+                    <i class="fa-solid fa-check text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= MÀN HÌNH KẾT QUẢ ================= -->
+        <div id="result-screen" class="hidden text-center py-4">
+            <div id="result-icon-box" class="w-20 h-20 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner bg-emerald-100 text-emerald-600">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            
+            <span id="rank-badge" class="bg-amber-100 text-amber-800 font-extrabold text-xs tracking-wider uppercase px-4 py-1.5 rounded-full mb-3 inline-block">
+                XUẤT SẮC
+            </span>
+
+            <h2 class="text-2xl font-black text-slate-800 mb-1">Chúc Mừng Hoàn Thành Bài Thi!</h2>
+            <p class="text-slate-500 text-sm mb-6">Bạn đã hoàn thành bài trắc nghiệm An sinh xã hội - Lớp 12.</p>
+
+            <!-- Score Stats Box -->
+            <div class="bg-slate-50 rounded-2xl p-4 md:p-6 border border-slate-200/80 mb-6 max-w-md mx-auto">
+                <div class="grid grid-cols-2 gap-4 divide-x divide-slate-200">
+                    <div class="text-center pr-2">
+                        <p class="text-xs text-slate-500 font-semibold mb-1">TỔNG ĐIỂM SỐ</p>
+                        <p id="res-score" class="text-3xl font-black text-sky-600">100/100</p>
+                    </div>
+                    <div class="text-center pl-2">
+                        <p class="text-xs text-slate-500 font-semibold mb-1">CÂU TRẢ LỜI ĐÚNG</p>
+                        <p id="res-correct" class="text-3xl font-black text-emerald-500">10/10</p>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-xs text-slate-500 font-medium">
+                    <span><i class="fa-solid fa-stopwatch mr-1"></i>Thời gian hoàn thành:</span>
+                    <span id="res-time" class="font-bold text-slate-700">01:45</span>
+                </div>
+            </div>
+
+            <!-- Review breakdown -->
+            <div id="review-section" class="text-left mb-6 max-w-md mx-auto">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Đánh giá nhanh:</p>
+                <div id="rank-description" class="p-3 bg-sky-50 border border-sky-100 rounded-xl text-xs text-sky-800 leading-relaxed font-medium">
+                    Bạn có hiểu biết sâu sắc và toàn diện về các chính sách an sinh xã hội!
+                </div>
+            </div>
+
+            <button onclick="restartGame()" class="w-full max-w-md py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold text-base rounded-2xl custom-btn-shadow flex items-center justify-center space-x-2 mx-auto">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>THỬ LẠI LẦN NỮA</span>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Data Questions
+        const questionsData = [
+            {
+                id: 1,
+                type: 'mc',
+                badge: 'Trắc nghiệm 4 lựa chọn',
+                question: 'Câu 1: An sinh xã hội là một trong những tiêu chí cơ bản để đánh giá điều gì?',
+                options: [
+                    'A. Tốc độ tăng dân số.',
+                    'B. Sự tiến bộ của xã hội, cộng đồng và quốc gia.',
+                    'C. Số lượng doanh nghiệp trong nước.',
+                    'D. Mức độ phát triển của thị trường.'
+                ],
+                answer: 1, // B
+                explanation: 'An sinh xã hội phản ánh mức độ quan tâm của quốc gia đối với đời sống nhân dân, là tiêu chí cơ bản đánh giá sự tiến bộ của xã hội, cộng đồng và quốc gia.'
+            },
+            {
+                id: 2,
+                type: 'mc',
+                badge: 'Trắc nghiệm 4 lựa chọn',
+                question: 'Câu 2: Thông qua hệ thống an sinh xã hội, Nhà nước có thể thực hiện vai trò nào sau đây?',
+                options: [
+                    'A. Điều tiết và phân phối lại của cải xã hội.',
+                    'B. Loại bỏ hoàn toàn mọi rủi ro.',
+                    'C. Xóa bỏ mọi khác biệt về thu nhập.',
+                    'D. Chỉ hỗ trợ người có việc làm.'
+                ],
+                answer: 0, // A
+                explanation: 'Thông qua chính sách thuế và quỹ an sinh xã hội, Nhà nước giúp điều tiết và phân phối lại thu nhập, của cải trong xã hội.'
+            },
+            {
+                id: 3,
+                type: 'mc',
+                badge: 'Trắc nghiệm 4 lựa chọn',
+                question: 'Câu 3: Khi người dân gặp rủi ro và có nguy cơ rơi vào hoàn cảnh khó khăn, an sinh xã hội có vai trò gì?',
+                options: [
+                    'A. Làm tăng sự phụ thuộc của tất cả người dân.',
+                    'B. Bảo đảm mọi người có thu nhập như nhau.',
+                    'C. Hỗ trợ khắc phục hậu quả, ổn định cuộc sống.',
+                    'D. Thay thế hoàn toàn trách nhiệm của gia đình.'
+                ],
+                answer: 2, // C
+                explanation: 'An sinh xã hội hoạt động như mạng lưới an toàn trợ giúp kịp thời cho người dân khắc phục hậu quả rủi ro, biến cố trong cuộc sống.'
+            },
+            {
+                id: 4,
+                type: 'mc',
+                badge: 'Trắc nghiệm 4 lựa chọn',
+                question: 'Câu 4: Năm 2022, số lao động có việc làm ở nước ta là bao nhiêu?',
+                options: [
+                    'A. 40,6 triệu người.',
+                    'B. 50,6 triệu người.',
+                    'C. 60,6 triệu người.',
+                    'D. 70,6 triệu người.'
+                ],
+                answer: 1, // B
+                explanation: 'Theo số liệu thống kê năm 2022, Việt Nam có khoảng 50,6 triệu lao động có việc làm.'
+            },
+            {
+                id: 5,
+                type: 'mc',
+                badge: 'Trắc nghiệm 4 lựa chọn',
+                question: 'Câu 5: Năm 2021, số người tham gia bảo hiểm y tế ở nước ta đạt khoảng bao nhiêu?',
+                options: [
+                    'A. 16,5 triệu người.',
+                    'B. 29,8 triệu người.',
+                    'C. 50,6 triệu người.',
+                    'D. 88,8 triệu người.'
+                ],
+                answer: 3, // D
+                explanation: 'Năm 2021, tỉ lệ bao phủ BHYT ở nước ta đạt rất cao với khoảng 88,8 triệu người tham gia.'
+            },
+            {
+                id: 6,
+                type: 'mc',
+                badge: 'Trắc nghiệm 4 lựa chọn',
+                question: 'Câu 6: Nội dung nào sau đây thể hiện vai trò của an sinh xã hội đối với phát triển kinh tế – xã hội?',
+                options: [
+                    'A. Làm gia tăng khoảng cách giữa các vùng.',
+                    'B. Chỉ tập trung hỗ trợ các doanh nghiệp lớn.',
+                    'C. Góp phần giảm nghèo, giảm bất bình đẳng và nâng cao đời sống.',
+                    'D. Hạn chế người dân tiếp cận dịch vụ xã hội cơ bản.'
+                ],
+                answer: 2, // C
+                explanation: 'An sinh xã hội góp phần thu hẹp khoảng cách giàu nghèo, giảm bất bình đẳng và cải thiện chất lượng sống cho mọi tầng lớp nhân dân.'
+            },
+            {
+                id: 7,
+                type: 'tf',
+                badge: 'Nhận định Đúng / Sai',
+                question: 'Câu 7: Đọc thông tin và đưa ra nhận định đúng/sai về số liệu thực hiện an sinh xã hội:',
+                statements: [
+                    { id: 'a', text: 'a) Năm 2022, tỉ lệ thất nghiệp trong độ tuổi lao động của cả nước là 2,34%.', answer: true, explanation: 'Đúng theo số liệu Tổng cục Thống kê 2022.' },
+                    { id: 'b', text: 'b) Năm 2022, tổng giá trị tiền và quà hỗ trợ cho các đối tượng là dưới 10 nghìn tỉ đồng.', answer: false, explanation: 'Sai. Tổng giá trị tiền và quà hỗ trợ là hơn 14,4 nghìn tỉ đồng.' },
+                    { id: 'c', text: 'c) Gần 29,8 triệu thẻ, sổ hoặc thẻ khám chữa bệnh miễn phí đã được phát, tặng.', answer: true, explanation: 'Đúng theo báo cáo kết quả thực hiện chính sách.' }
+                ]
+            },
+            {
+                id: 8,
+                type: 'tf',
+                badge: 'Nhận định Đúng / Sai',
+                question: 'Câu 8: Nhận định về vai trò của an sinh xã hội:',
+                statements: [
+                    { id: 'a', text: 'a) An sinh xã hội là quyền và đòi hỏi chính đáng của con người.', answer: true, explanation: 'Đúng, đây là quyền cơ bản được Hiến pháp và Công ước quốc tế bảo vệ.' },
+                    { id: 'b', text: 'b) An sinh xã hội chỉ có vai trò hỗ trợ người nghèo, không liên quan đến phát triển kinh tế.', answer: false, explanation: 'Sai. An sinh xã hội còn giúp ổn định trật tự xã hội, tạo nguồn nhân lực và thúc đẩy tăng trưởng kinh tế.' },
+                    { id: 'c', text: 'c) An sinh xã hội giúp giảm chênh lệch giữa các vùng và các nhóm dân cư.', answer: true, explanation: 'Đúng, nhờ công cụ phân phối lại tài nguyên của nhà nước.' }
+                ]
+            },
+            {
+                id: 9,
+                type: 'tf',
+                badge: 'Nhận định Đúng / Sai',
+                question: 'Câu 9: Nhận định về các chính sách an sinh xã hội ở Việt Nam:',
+                statements: [
+                    { id: 'a', text: 'a) Bảo hiểm xã hội, bảo hiểm y tế và bảo hiểm thất nghiệp đều là những nội dung được phản ánh trong kết quả thực hiện chính sách bảo hiểm.', answer: true, explanation: 'Đúng, đây là 3 trụ cột lớn của chính sách bảo hiểm.' },
+                    { id: 'b', text: 'b) Chính sách trợ giúp xã hội chỉ dành cho người có công với cách mạng.', answer: false, explanation: 'Sai. Trợ giúp xã hội còn mở rộng cho hộ nghèo, người yếu thế, bảo trợ xã hội và đối tượng gặp rủi ro thiên tai.' },
+                    { id: 'c', text: 'c) Bảo đảm dịch vụ xã hội cơ bản có liên quan đến giáo dục, y tế, nước sạch và thông tin.', answer: true, explanation: 'Đúng, đây là các dịch vụ xã hội thiết yếu theo chuẩn đa chiều.' }
+                ]
+            },
+            {
+                id: 10,
+                type: 'tf',
+                badge: 'Nhận định Đúng / Sai',
+                question: 'Câu 10: Nhận định về ý nghĩa của an sinh xã hội:',
+                statements: [
+                    { id: 'a', text: 'a) An sinh xã hội giúp người thụ hưởng tăng cơ hội tiếp cận các dịch vụ xã hội cơ bản.', answer: true, explanation: 'Đúng, hỗ trợ nâng cao năng lực tiếp cận y tế, giáo dục, nhà ở...' },
+                    { id: 'b', text: 'b) Thực hiện tốt an sinh xã hội có thể góp phần củng cố tinh thần đoàn kết, tương thân tương ái.', answer: true, explanation: 'Đúng, thể hiện nét đẹp truyền thống "lá lành đùm lá rách".' },
+                    { id: 'c', text: 'c) An sinh xã hội có thể giải quyết triệt để mọi vấn đề bất bình đẳng trong xã hội.', answer: false, explanation: 'Sai. An sinh xã hội góp phần thu hẹp và giảm bất bình đẳng chứ không thể xóa bỏ triệt để mọi khác biệt.' }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let totalCorrect = 0;
+        let timerInterval = null;
+        let totalSeconds = 0;
+        let userTfChoices = {}; // Store selections for True/False questions
+
+        // Audio Effects (Synthesized using Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, audioCtx.currentTime + 0.15); // E5
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+                    osc.frequency.exponentialRampToValueAtTime(130.81, audioCtx.currentTime + 0.25); // C4
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.25);
+                }
+            } catch (e) {
+                console.log("Audio play error", e);
+            }
+        }
+
+        // Timer Function
+        function startTimer() {
+            totalSeconds = 0;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                totalSeconds++;
+                const mins = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+                const secs = (totalSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer').innerText = ${mins}:${secs};
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Start Game
+        function startGame() {
+            // Reset States
+            currentQuestionIndex = 0;
+            score = 0;
+            totalCorrect = 0;
+            document.getElementById('current-score').innerText = '0';
+
+            // Switch Screen
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+
+            startTimer();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questionsData[currentQuestionIndex];
+
+            // Reset view state
+            document.getElementById('explanation-box').classList.add('hidden');
+            document.getElementById('feedback-tag').classList.add('hidden');
+            document.getElementById('btn-next').classList.add('hidden');
+            document.getElementById('btn-submit-tf').classList.add('hidden');
+
+            // Update Header & Progress
+            document.getElementById('question-number-text').innerText = CÂU ${currentQuestionIndex + 1} / ${questionsData.length};
+            const progressPercent = Math.round(((currentQuestionIndex + 1) / questionsData.length) * 100);
+            document.getElementById('progress-bar').style.width = ${progressPercent}%;
+            document.getElementById('progress-percent').innerText = ${progressPercent}%;
+
+            document.getElementById('question-type-badge').innerText = q.badge;
+            document.getElementById('question-text').innerText = q.question;
+
+            const mcContainer = document.getElementById('mc-options-container');
+            const tfContainer = document.getElementById('tf-options-container');
+
+            if (q.type === 'mc') {
+                mcContainer.classList.remove('hidden');
+                tfContainer.classList.add('hidden');
+                mcContainer.innerHTML = '';
+
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = mc-opt-btn w-full text-left p-3.5 md:p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/50 font-medium text-sm md:text-base text-slate-700 transition flex items-center justify-between group;
+                    btn.onclick = () => selectMcAnswer(idx);
+                    btn.innerHTML = `
+                        <span>${opt}</span>
+                        <i class="fa-regular fa-circle text-slate-300 group-hover:text-sky-400 text-lg"></i>
+                    `;
+                    mcContainer.appendChild(btn);
+                });
+            } else if (q.type === 'tf') {
+                mcContainer.classList.add('hidden');
+                tfContainer.classList.remove('hidden');
+                tfContainer.innerHTML = '';
+                userTfChoices = {}; // reset choices
+
+                q.statements.forEach((stmt) => {
+                    const row = document.createElement('div');
+                    row.className = 'p-3.5 bg-white border-2 border-slate-200 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3';
+                    row.innerHTML = `
+                        <p class="text-sm font-semibold text-slate-800 leading-snug flex-1">${stmt.text}</p>
+                        <div class="flex items-center space-x-2 self-end md:self-auto shrink-0">
+                            <button id="btn-tf-${stmt.id}-true" onclick="selectTfChoice('${stmt.id}', true)" class="px-4 py-2 border border-slate-300 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:border-emerald-400 transition flex items-center space-x-1">
+                                <i class="fa-solid fa-check"></i>
+                                <span>ĐÚNG</span>
+                            </button>
+                            <button id="btn-tf-${stmt.id}-false" onclick="selectTfChoice('${stmt.id}', false)" class="px-4 py-2 border border-slate-300 rounded-xl text-xs font-bold text-slate-600 hover:bg-rose-50 hover:border-rose-400 transition flex items-center space-x-1">
+                                <i class="fa-solid fa-xmark"></i>
+                                <span>SAI</span>
+                            </button>
+                        </div>
+                    `;
+                    tfContainer.appendChild(row);
+                });
+
+                document.getElementById('btn-submit-tf').classList.remove('hidden');
+            }
+        }
+
+        // Process Choice for Multiple Choice
+        function selectMcAnswer(selectedIdx) {
+            const q = questionsData[currentQuestionIndex];
+            const buttons = document.querySelectorAll('.mc-opt-btn');
+
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+
+            const isCorrect = (selectedIdx === q.answer);
+
+            if (isCorrect) {
+                playSound('correct');
+                score += 10;
+                totalCorrect += 1;
+                buttons[selectedIdx].className = 'mc-opt-btn w-full text-left p-3.5 md:p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-bold text-emerald-800 text-sm md:text-base flex items-center justify-between';
+                buttons[selectedIdx].querySelector('i').className = 'fa-solid fa-circle-check text-emerald-500 text-lg';
+                showFeedback(true, 'Rất chính xác!');
+            } else {
+                playSound('wrong');
+                buttons[selectedIdx].className = 'mc-opt-btn w-full text-left p-3.5 md:p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 font-bold text-rose-800 text-sm md:text-base flex items-center justify-between';
+                buttons[selectedIdx].querySelector('i').className = 'fa-solid fa-circle-xmark text-rose-500 text-lg';
+
+                // Highlight correct one
+                buttons[q.answer].className = 'mc-opt-btn w-full text-left p-3.5 md:p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-bold text-emerald-800 text-sm md:text-base flex items-center justify-between';
+                buttons[q.answer].querySelector('i').className = 'fa-solid fa-circle-check text-emerald-500 text-lg';
+
+                showFeedback(false, 'Chưa chính xác!');
+            }
+
+            document.getElementById('current-score').innerText = score;
+
+            // Show explanation
+            document.getElementById('explanation-text').innerText = q.explanation;
+            document.getElementById('explanation-box').classList.remove('hidden');
+
+            document.getElementById('btn-next').classList.remove('hidden');
+        }
+
+        // Process True / False Choices
+        function selectTfChoice(stmtId, val) {
+            userTfChoices[stmtId] = val;
+
+            const btnTrue = document.getElementById(btn-tf-${stmtId}-true);
+            const btnFalse = document.getElementById(btn-tf-${stmtId}-false);
+
+            if (val === true) {
+                btnTrue.className = 'px-4 py-2 border-2 border-emerald-500 bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-sm';
+                btnFalse.className = 'px-4 py-2 border border-slate-200 bg-slate-50 text-slate-400 rounded-xl text-xs font-bold transition flex items-center space-x-1';
+            } else {
+                btnFalse.className = 'px-4 py-2 border-2 border-rose-500 bg-rose-500 text-white rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-sm';
+                btnTrue.className = 'px-4 py-2 border border-slate-200 bg-slate-50 text-slate-400 rounded-xl text-xs font-bold transition flex items-center space-x-1';
+            }
+        }
+
+        // Submit True / False Question
+        function submitTFAnswer() {
+            const q = questionsData[currentQuestionIndex];
+
+            // Verify all items selected
+            if (Object.keys(userTfChoices).length < q.statements.length) {
+                alert('Vui lòng chọn ĐÚNG hoặc SAI cho tất cả các nhận định!');
+                return;
+            }
+
+            document.getElementById('btn-submit-tf').classList.add('hidden');
+
+            let allCorrect = true;
+            let explanationParts = [];
+
+            q.statements.forEach((stmt) => {
+                const userVal = userTfChoices[stmt.id];
+                const btnTrue = document.getElementById(btn-tf-${stmt.id}-true);
+                const btnFalse = document.getElementById(btn-tf-${stmt.id}-false);
+
+                btnTrue.disabled = true;
+                btnFalse.disabled = true;
+
+                if (userVal !== stmt.answer) {
+                    allCorrect = false;
+                }
+
+                explanationParts.push(- Ý (${stmt.id}): ${stmt.explanation});
+            });
+
+            if (allCorrect) {
+                playSound('correct');
+                score += 10;
+                totalCorrect += 1;
+                showFeedback(true, 'Chính xác hoàn toàn tất cả các ý!');
+            } else {
+                playSound('wrong');
+                showFeedback(false, 'Có ý trả lời chưa chính xác!');
+            }
+
+            document.getElementById('current-score').innerText = score;
+
+            document.getElementById('explanation-text').innerText = explanationParts.join('\n');
+            document.getElementById('explanation-box').classList.remove('hidden');
+
+            document.getElementById('btn-next').classList.remove('hidden');
+        }
+
+        function showFeedback(isSuccess, text) {
+            const tag = document.getElementById('feedback-tag');
+            tag.classList.remove('hidden');
+            if (isSuccess) {
+                tag.className = 'flex items-center space-x-1.5 font-bold text-sm text-emerald-600';
+                tag.innerHTML = <i class="fa-solid fa-circle-check"></i> <span>${text}</span>;
+            } else {
+                tag.className = 'flex items-center space-x-1.5 font-bold text-sm text-rose-600';
+                tag.innerHTML = <i class="fa-solid fa-circle-xmark"></i> <span>${text}</span>;
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            stopTimer();
+
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            document.getElementById('res-score').innerText = ${score}/100;
+            document.getElementById('res-correct').innerText = ${totalCorrect}/10;
+
+            const mins = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+            const secs = (totalSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('res-time').innerText = ${mins}:${secs};
+
+            // Evaluate rank
+            const rankBadge = document.getElementById('rank-badge');
+            const rankDesc = document.getElementById('rank-description');
+            const iconBox = document.getElementById('result-icon-box');
+
+            if (score >= 90) {
+                rankBadge.innerText = 'XUẤT SẮC';
+                rankBadge.className = 'bg-amber-100 text-amber-800 font-extrabold text-xs tracking-wider uppercase px-4 py-1.5 rounded-full mb-3 inline-block';
+                iconBox.className = 'w-20 h-20 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner bg-amber-100 text-amber-600';
+                iconBox.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+                rankDesc.innerText = 'Tuyệt vời! Bạn nắm vững hoàn toàn các kiến thức về chính sách An sinh xã hội Việt Nam.';
+            } else if (score >= 70) {
+                rankBadge.innerText = 'GIỎI';
+                rankBadge.className = 'bg-sky-100 text-sky-800 font-extrabold text-xs tracking-wider uppercase px-4 py-1.5 rounded-full mb-3 inline-block';
+                iconBox.className = 'w-20 h-20 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner bg-sky-100 text-sky-600';
+                iconBox.innerHTML = '<i class="fa-solid fa-medal"></i>';
+                rankDesc.innerText = 'Kết quả rất tốt! Bạn đã nắm chắc hầu hết các nội dung trọng tâm bài học.';
+            } else if (score >= 50) {
+                rankBadge.innerText = 'KHÁ';
+                rankBadge.className = 'bg-indigo-100 text-indigo-800 font-extrabold text-xs tracking-wider uppercase px-4 py-1.5 rounded-full mb-3 inline-block';
+                iconBox.className = 'w-20 h-20 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner bg-indigo-100 text-indigo-600';
+                iconBox.innerHTML = '<i class="fa-solid fa-award"></i>';
+                rankDesc.innerText = 'Khá tốt! Hãy ôn tập lại một số câu hỏi nhận định Đúng/Sai để đạt điểm tối đa nhé.';
+            } else {
+                rankBadge.innerText = 'CẦN CỐ GẮNG';
+                rankBadge.className = 'bg-rose-100 text-rose-800 font-extrabold text-xs tracking-wider uppercase px-4 py-1.5 rounded-full mb-3 inline-block';
+                iconBox.className = 'w-20 h-20 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner bg-rose-100 text-rose-600';
+                iconBox.innerHTML = '<i class="fa-solid fa-book-open"></i>';
+                rankDesc.innerText = 'Đừng nản lòng! Hãy đọc lại nội dung bài học về An sinh xã hội và thử lại lần nữa.';
+            }
+        }
+
+        function restartGame() {
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
+Đã gửi 33 phút trước
+Soạn
+Viết
